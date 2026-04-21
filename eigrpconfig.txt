@@ -1,0 +1,103 @@
+. Configure routers with IP address as shown in topology and configure enable 
+password as ccna & device access password as cisco (Refer Lab-1) 
+2. Configure EIGRP process with ASN 100 on all routers and advertise its directly 
+connected networks. 
+3. All router should able to ping each other’s PCs IP.  
+4. PCs should able to ping each other’s IP. 
+5. Modify default Hello and Hold-time on R1 
+6. Configure un-equal load balancing on R2 for R4’s LAN network. 
+7. Configure Load as EIGRP metric for best path calculation.  
+8. Configure MD5 authentication between R2 & R4 
+
+enable
+conf t
+hostname Rx
+
+enable password ccna
+
+line con 0
+password cisco
+login
+
+line vty 0 4
+password cisco
+login
+
+
+int g0/0
+ip add 12.12.12.1 255.255.255.0
+no shut
+
+int g0/1
+ip add 192.168.1.1 255.255.255.0
+no shut
+
+
+int g0/0
+ip add 12.12.12.2 255.255.255.0
+no shut
+
+int g0/1
+ip add 24.24.24.2 255.255.255.0
+no shut
+
+int g0/2
+ip add 23.23.23.2 255.255.255.0
+no shut
+
+int g0/3
+ip add 192.168.2.2 255.255.255.0
+no shut
+
+
+int g0/0
+ip add 23.23.23.3 255.255.255.0
+no shut
+
+int g0/1
+ip add 34.34.34.3 255.255.255.0
+no shut
+
+
+int g0/0
+ip add 24.24.24.4 255.255.255.0
+no shut
+
+int g0/1
+ip add 34.34.34.4 255.255.255.0
+no shut
+
+int g0/2
+ip add 192.168.4.4 255.255.255.0
+no shut
+
+
+router eigrp 100
+no auto-summary
+
+network 12.12.12.0 0.0.0.255
+network 192.168.1.0 0.0.0.255
+
+
+router eigrp 100
+no auto-summary
+
+network 12.12.12.0 0.0.0.255
+network 23.23.23.0 0.0.0.255
+network 24.24.24.0 0.0.0.255
+network 192.168.2.0 0.0.0.255
+
+
+router eigrp 100
+no auto-summary
+
+network 23.23.23.0 0.0.0.255
+network 34.34.34.0 0.0.0.255
+
+
+router eigrp 100
+no auto-summary
+
+network 24.24.24.0 0.0.0.255
+network 34.34.34.0 0.0.0.255
+network 192.168.4.0 0.0.0.255
