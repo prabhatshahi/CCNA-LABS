@@ -1,0 +1,186 @@
+Task 1. Configure routers with IP address as shown in topology and configure enable password as ccna & device access password as cisco (Refer Lab 11) 
+2. Configure Multi-Area OSPF process as per the topology. 
+3. Configure Virtual-link to provide communication of Area 45 with Area 0 
+4. Configure Priority of 255 to make R1 as permanent DR. Task -
+2: Configure Multi-Area OSPF process as per the topology. STEP BY STEP
+
+
+
+enable
+conf t
+hostname R1
+
+enable password ccna
+
+line con 0
+password cisco
+login
+
+line vty 0 4
+password cisco
+login
+
+! Interfaces
+int g0/0
+ip add 10.10.10.1 255.255.255.0
+no shut
+
+int g0/1
+ip add 14.14.14.1 255.255.255.0
+no shut
+
+int lo0
+ip add 1.1.1.1 255.255.255.255
+
+! OSPF
+router ospf 1
+router-id 1.1.1.1
+
+network 10.10.10.0 0.0.0.255 area 0
+network 14.14.14.0 0.0.0.255 area 14
+network 1.1.1.1 0.0.0.0 area 0
+
+! Make R1 DR
+interface g0/0
+ip ospf priority 255
+
+enable
+conf t
+hostname R2
+
+enable password ccna
+
+line con 0
+password cisco
+login
+
+line vty 0 4
+password cisco
+login
+
+int g0/0
+ip add 10.10.10.2 255.255.255.0
+no shut
+
+int g0/1
+ip add 192.168.2.2 255.255.255.0
+no shut
+
+int lo0
+ip add 2.2.2.2 255.255.255.255
+
+router ospf 1
+router-id 2.2.2.2
+
+network 10.10.10.0 0.0.0.255 area 0
+network 192.168.2.0 0.0.0.255 area 0
+network 2.2.2.2 0.0.0.0 area 0
+
+enable
+conf t
+hostname R3
+
+enable password ccna
+
+line con 0
+password cisco
+login
+
+line vty 0 4
+password cisco
+login
+
+int g0/0
+ip add 10.10.10.3 255.255.255.0
+no shut
+
+int g0/1
+ip add 192.168.3.3 255.255.255.0
+no shut
+
+int lo0
+ip add 3.3.3.3 255.255.255.255
+
+router ospf 1
+router-id 3.3.3.3
+
+network 10.10.10.0 0.0.0.255 area 0
+network 192.168.3.0 0.0.0.255 area 0
+network 3.3.3.3 0.0.0.0 area 0
+
+enable
+conf t
+hostname R4
+
+enable password ccna
+
+line con 0
+password cisco
+login
+
+line vty 0 4
+password cisco
+login
+
+int g0/0
+ip add 14.14.14.4 255.255.255.0
+no shut
+
+int g0/1
+ip add 45.45.45.4 255.255.255.0
+no shut
+
+int g0/2
+ip add 192.168.4.4 255.255.255.0
+no shut
+
+int lo0
+ip add 4.4.4.4 255.255.255.255
+
+router ospf 1
+router-id 4.4.4.4
+
+network 14.14.14.0 0.0.0.255 area 14
+network 45.45.45.0 0.0.0.255 area 45
+network 192.168.4.0 0.0.0.255 area 14
+network 4.4.4.4 0.0.0.0 area 14
+
+enable
+conf t
+hostname R5
+
+enable password ccna
+
+line con 0
+password cisco
+login
+
+line vty 0 4
+password cisco
+login
+
+int g0/0
+ip add 45.45.45.5 255.255.255.0
+no shut
+
+int g0/1
+ip add 192.168.5.5 255.255.255.0
+no shut
+
+int lo0
+ip add 5.5.5.5 255.255.255.255
+
+router ospf 1
+router-id 5.5.5.5
+
+network 45.45.45.0 0.0.0.255 area 45
+network 192.168.5.0 0.0.0.255 area 45
+network 5.5.5.5 0.0.0.0 area 45
+
+on r1
+router ospf 1
+area 14 virtual-link 4.4.4.4
+
+on r4
+router ospf 1
+area 14 virtual-link 1.1.1.1
